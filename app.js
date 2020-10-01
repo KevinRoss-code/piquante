@@ -1,9 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const userRouteur = require('./routes/user');
-const Sauce = require('./models/sauce')
-
+const userRouter = require('./routes/user');
+const Thing = require('./models/thing')
 
 const app = express();
 
@@ -24,34 +23,30 @@ mongoose.connect(uri,
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-
-    
-
-//mise ne place des middleware qui sont des variables et permettent d'éxecuter le code
-app.post('/api/sauces', (req, res, next) => {
-    //delete req.body._id;
-    const sauce = new Sauce({
-        ...req.body
-    });
-    sauce.save()
-    .then(() => res.status(201).json({ message: 'Objet enregistré'}))
+app.post('api/sauces', (req, res, next) => {
+    delete req.body._id;
+  const thing = new Thing({
+    ...req.body
+  });
+  thing.save()
+    .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
     .catch(error => res.status(400).json({ error }));
 });
 
-app.get('/api/sauces/:id', (req, res, next) => {
-    Sauce.findOne({_id: req.params.id })
-    .then(sauce => res.status(200).json(sauce))
-    .catch(error => res.status(404).json({ error }));
-});
+
 
 app.get('/api/sauces', (req, res, next) => {
-    Sauce.find()
-    .then(sauces => res.status(200).json(sauces))
-    .catch(error => res.status(400).json({ error }));
-});
+    Thing.find()
+    .then(things => res.status(200).json(things))
+    .catch(error => res.status(404).json({ error }));
+  });
 
-app.use('/api/auth', userRouteur);
+app.get('/api/sauces/:id', (req, res, next) => {
+    Thing.findOne({ _id: req.params.id })
+      .then(thing => res.status(200).json(thing))
+      .catch(error => res.status(405).json({ error }));
+  });
+
+  app.use('/api/auth', userRouter);
 
 module.exports = app;
-
-

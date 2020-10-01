@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const app = require('../app');
 
-const sauceSchema = mongoose.Schema({
+const thingSchema = mongoose.Schema({
   userId: { type: String, required: true },
   name: { type: String, required: true },
   nanufacturer: { type: String, required: true },
@@ -10,4 +10,4 @@ const sauceSchema = mongoose.Schema({
   heat: { type: Number, required: true }
 });
 
-module.exports = mongoose.model('Sauce', sauceSchema);
+module.exports = mongoose.model('Thing', thingSchema);
