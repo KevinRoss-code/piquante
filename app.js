@@ -1,9 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const saucesRouter = require('./routes/sauces')
 const userRouter = require('./routes/user');
-const Thing = require('./models/thing');
-const saucesRouter = require('./routes/sauces');
+const path = require('path');
+
+
 
 const app = express();
 
@@ -19,13 +21,17 @@ app.use(bodyParser.json());
 
 const uri = "mongodb+srv://loursenrage:Asc1THn9@bdd-piquante.m0qvo.mongodb.net/BDD-piquante?retryWrites=true&w=majority";
 mongoose.connect(uri,
-    { useNewUrlParser: true,
-        useUnifiedTopology: true })
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 
+
 app.use('/api/sauces', saucesRouter);
 app.use('/api/auth', userRouter);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
