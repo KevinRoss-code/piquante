@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const saucesRouter = require('./routes/sauces')
 const userRouter = require('./routes/user');
 const path = require('path');
+var helmet = require('helmet');
+
 
 
 
@@ -27,7 +29,8 @@ mongoose.connect(uri,
     })
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(() => console.log('Connexion à MongoDB échouée !'));
-
+    
+app.use(helmet());
 
 
 app.use('/api/sauces', saucesRouter);
