@@ -4,12 +4,15 @@ const mongoose = require('mongoose');
 const saucesRouter = require('./routes/sauces')
 const userRouter = require('./routes/user');
 const path = require('path');
-var helmet = require('helmet');
+const helmet = require('helmet');
+const dotenv = require('dotenv');
 
 
 
 
 const app = express();
+
+dotenv.config({ path: './.env'});
 
 
 app.use((req, res, next) => {
@@ -21,7 +24,7 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-const uri = "mongodb+srv://loursenrage:Asc1THn9@bdd-piquante.m0qvo.mongodb.net/BDD-piquante?retryWrites=true&w=majority";
+const uri = process.env.MONGOCONNECT;
 mongoose.connect(uri,
     {
         useNewUrlParser: true,
