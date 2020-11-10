@@ -1,11 +1,20 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/users');
 const jwt = require('jsonwebtoken');
-const passwordValidator = require('../models/passwordSchema');
+const passwordValidator = require('password-validator')
+
 
 exports.signup = (req, res, next) => {
-    const passwordValidator = new passwordValidator();
-    if (!schema.validate(req.body.password)) {
+let schema = new passwordValidator();
+    schema
+        .is().min(8)
+        .is().max(30)
+        .has().uppercase()
+        .has().lowercase()
+        .has().digits(2)
+        .has().not().spaces()
+        .is().not().oneOf(['Passw0rd', 'Password123']);
+if (!schema.validate(req.body.password)) {
         res.status(400).json({ message: 'Mot de passe invalide' })
     } else {
         bcrypt.hash(req.body.password, 10)
