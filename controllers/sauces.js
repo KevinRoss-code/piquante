@@ -1,4 +1,4 @@
-const Sauce = require('../models/thing');
+const Sauce = require('../models/sauce');
 const user = require('../controllers/user');
 const fs = require('fs');
 
@@ -44,7 +44,6 @@ exports.supprimerSauces = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 };
 
-
 exports.routeGeneral = (req, res, next) => {
     Sauce.find()
         .then(sauce => res.status(200).json(sauce))
@@ -60,11 +59,9 @@ exports.fonctionLike = (req, res, next) => {
                 {
                     $push: { usersLiked: req.body.userId },
                     $inc: { likes: 1 }
-                }
-
-            )
-            .then(sauce => res.status(200).json(sauce))
-            .catch(error => res.status(400).json({ error }));
+                })
+                .then(sauce => res.status(200).json(sauce))
+                .catch(error => res.status(400).json({ error }));
             break;
         case -1:
             Sauce.findOneAndUpdate(
@@ -72,51 +69,36 @@ exports.fonctionLike = (req, res, next) => {
                 {
                     $push: { usersDisliked: req.body.userId },
                     $inc: { dislikes: 1 }
-                }
-
-            )
-            .then(sauce => res.status(200).json(sauce))
-            .catch(error => res.status(400).json({ error }));
+                })
+                .then(sauce => res.status(200).json(sauce))
+                .catch(error => res.status(400).json({ error }));
             break;
         case 0:
-            Sauce.findOne({_id: req.params.id})
-            .then(sauce => {
-                let user = sauce.usersLiked.find(elt => elt === req.body.userId)
-                if(user !== undefined) { 
-                    Sauce.findOneAndUpdate(
-                        { _id: req.params.id },
-                        {
-                            $pull: { usersLiked: req.body.userId },
-                            $inc: { likes: -1 }
-                        }
-        
-                    )
-                    .then(sauce => res.status(200).json(sauce))
-                    .catch(error => res.status(400).json({ error }));
-                }else {
-                    Sauce.findOneAndUpdate(
-                        { _id: req.params.id },
-                        {
-                            $pull: { usersDisliked: req.body.userId },
-                            $inc: { dislikes: -1 }
-                        }
-        
-                    )
-                    .then(sauce => res.status(200).json(sauce))
-                    .catch(error => res.status(400).json({ error }));
-                }
-            })
-           
-                
-                
-           
-                
-        
+            Sauce.findOne({ _id: req.params.id })
+                .then(sauce => {
+                    let user = sauce.usersLiked.find(elt => elt === req.body.userId)
+                    if (user !== undefined) {
+                        Sauce.findOneAndUpdate(
+                            { _id: req.params.id },
+                            {
+                                $pull: { usersLiked: req.body.userId },
+                                $inc: { likes: -1 }
+                            })
+                            .then(sauce => res.status(200).json(sauce))
+                            .catch(error => res.status(400).json({ error }));
+                    } else {
+                        Sauce.findOneAndUpdate(
+                            { _id: req.params.id },
+                            {
+                                $pull: { usersDisliked: req.body.userId },
+                                $inc: { dislikes: -1 }
+                            })
+                            .then(sauce => res.status(200).json(sauce))
+                            .catch(error => res.status(400).json({ error }));
+                    }
+                })
         default:
             break;
     };
-
-
-
 }
 

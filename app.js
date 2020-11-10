@@ -7,13 +7,9 @@ const path = require('path');
 const helmet = require('helmet');
 const dotenv = require('dotenv');
 
-
-
-
 const app = express();
 
 dotenv.config({ path: './.env'});
-
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -34,7 +30,6 @@ mongoose.connect(uri,
     .catch(() => console.log('Connexion à MongoDB échouée !'));
     
 app.use(helmet());
-
 
 app.use('/api/sauces', saucesRouter);
 app.use('/api/auth', userRouter);
